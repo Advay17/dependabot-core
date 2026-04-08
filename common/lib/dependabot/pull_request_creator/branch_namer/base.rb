@@ -78,7 +78,7 @@ module Dependabot
           # General git ref validation
           sanitized_name = sanitize_ref(ref_name)
 
-          # Some users need branch names without slashes
+          # Allow the name to be customized with different separators
           sanitized_name = sanitized_name.gsub(/[\/_\-]/, "\/" => separator, "_" => secondary_separator, "-" => dependency_separator)
 
           # Shorten the ref in case users refs have length limits
