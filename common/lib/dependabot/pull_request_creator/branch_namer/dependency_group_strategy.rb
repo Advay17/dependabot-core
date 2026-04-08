@@ -18,6 +18,8 @@ module Dependabot
             dependency_group: Dependabot::DependencyGroup,
             includes_security_fixes: T::Boolean,
             separator: String,
+            secondary_separator: String,
+            dependency_separator: String,
             prefix: String,
             max_length: T.nilable(Integer)
           )
@@ -30,6 +32,8 @@ module Dependabot
           dependency_group:,
           includes_security_fixes:,
           separator: "/",
+          secondary_separator: "_",
+          dependency_separator: "-",
           prefix: "dependabot",
           max_length: nil
         )
@@ -38,6 +42,8 @@ module Dependabot
             files: files,
             target_branch: target_branch,
             separator: separator,
+            secondary_separator: secondary_separator,
+            dependency_separator: dependency_separator,
             prefix: prefix,
             max_length: max_length,
           )

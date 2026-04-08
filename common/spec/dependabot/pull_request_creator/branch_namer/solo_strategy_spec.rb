@@ -22,7 +22,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       name: dependency_name,
       version: dependency_version,
       previous_version: previous_version,
-      package_manager: "dummy",
+      package_manager: "dummy_manager",
       requirements: requirements,
       previous_requirements: previous_requirements
     )
@@ -49,7 +49,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
   describe "#new_branch_name" do
     subject(:new_branch_name) { namer.new_branch_name }
 
-    it { is_expected.to eq("dependabot/dummy/business-1.5.0") }
+    it { is_expected.to eq("dependabot/dummy_manager/business-1.5.0") }
 
     context "with directory" do
       let(:gemfile) do
@@ -61,14 +61,14 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       end
       let(:directory) { "directory" }
 
-      it { is_expected.to eq("dependabot/dummy/directory/business-1.5.0") }
+      it { is_expected.to eq("dependabot/dummy_manager/directory/business-1.5.0") }
 
       context "when the directory name starts with a dot" do
         let(:directory) { ".directory" }
 
         it "sanitizes the dot" do
           expect(new_branch_name)
-            .to eq("dependabot/dummy/dot-directory/business-1.5.0")
+            .to eq("dependabot/dummy_manager/dot-directory/business-1.5.0")
         end
       end
     end
@@ -84,13 +84,13 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       end
       let(:prefix) { "myapp" }
 
-      it { is_expected.to eq("myapp/dummy/business-1.5.0") }
+      it { is_expected.to eq("myapp/dummy_manager/business-1.5.0") }
     end
 
     context "with a target branch" do
       let(:target_branch) { "my-branch" }
 
-      it { is_expected.to eq("dependabot/dummy/my-branch/business-1.5.0") }
+      it { is_expected.to eq("dependabot/dummy_manager/my-branch/business-1.5.0") }
     end
 
     context "with a custom branch name separator" do
@@ -103,7 +103,33 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
         )
       end
 
-      it { is_expected.to eq("dependabot-dummy-business-1.5.0") }
+      it { is_expected.to eq("dependabot-dummy_manager-business-1.5.0") }
+    end
+
+    context "with a custom branch name secondary separator" do
+      let(:namer) do
+        described_class.new(
+          dependencies: dependencies,
+          files: files,
+          target_branch: target_branch,
+          separator: "-"
+        )
+      end
+
+      it { is_expected.to eq("dependabot/dummy-manager/business-1.5.0") }
+    end
+
+    context "with a custom branch dependency name separator" do
+      let(:namer) do
+        described_class.new(
+          dependencies: dependencies,
+          files: files,
+          target_branch: target_branch,
+          separator: "_"
+        )
+      end
+
+      it { is_expected.to eq("dependabot/dummy_manager/business_1.5.0") }
     end
 
     context "with a maximum length" do
@@ -119,7 +145,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       context "with a maximum length longer than branch name" do
         let(:max_length) { 35 }
 
-        it { is_expected.to eq("dependabot/dummy/business-1.5.0") }
+        it { is_expected.to eq("dependabot/dummy_manager/business-1.5.0") }
         its(:length) { is_expected.to eq(31) }
       end
 
@@ -129,21 +155,21 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
         context "with a maximum length longer than sha1 length" do
           let(:max_length) { 50 }
 
-          it { is_expected.to eq("dependabot#{Digest::SHA1.hexdigest("dependabot/dummy/#{dependency_name}-1.5.0")}") }
+          it { is_expected.to eq("dependabot#{Digest::SHA1.hexdigest("dependabot/dummy_manager/#{dependency_name}-1.5.0")}") }
           its(:length) { is_expected.to eq(50) }
         end
 
         context "with a maximum length equal than sha1 length" do
           let(:max_length) { 40 }
 
-          it { is_expected.to eq(Digest::SHA1.hexdigest("dependabot/dummy/#{dependency_name}-1.5.0")) }
+          it { is_expected.to eq(Digest::SHA1.hexdigest("dependabot/dummy_manager/#{dependency_name}-1.5.0")) }
           its(:length) { is_expected.to eq(40) }
         end
 
         context "with a maximum length shorter than sha1 length" do
           let(:max_length) { 20 }
 
-          it { is_expected.to eq(Digest::SHA1.hexdigest("dependabot/dummy/#{dependency_name}-1.5.0")[0...20]) }
+          it { is_expected.to eq(Digest::SHA1.hexdigest("dependabot/dummy_manager/#{dependency_name}-1.5.0")[0...20]) }
           its(:length) { is_expected.to eq(20) }
         end
       end
@@ -156,7 +182,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
           name: "statesman",
           version: "1.5.0",
           previous_version: "1.4.0",
-          package_manager: "dummy",
+          package_manager: "dummy_manager",
           requirements: [{
             file: "Gemfile",
             requirement: "~> 1.5.0",
@@ -172,7 +198,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
         )
       end
 
-      it { is_expected.to eq("dependabot/dummy/multi-fc93691fd4") }
+      it { is_expected.to eq("dependabot/dummy_manager/multi-fc93691fd4") }
 
       context "when dealing with a java property update" do
         let(:files) { [pom] }
@@ -299,7 +325,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
           name: "business",
           version: nil,
           previous_version: "1.4.0",
-          package_manager: "dummy",
+          package_manager: "dummy_manager",
           requirements: [],
           previous_requirements: [],
           removed: true
@@ -310,7 +336,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
           name: "statesman",
           version: "1.5.0",
           previous_version: "1.4.0",
-          package_manager: "dummy",
+          package_manager: "dummy_manager",
           requirements: [{
             file: "Gemfile",
             requirement: "~> 1.5.0",
@@ -326,7 +352,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
         )
       end
 
-      it { is_expected.to eq("dependabot/dummy/multi-068ffedafd") }
+      it { is_expected.to eq("dependabot/dummy_manager/multi-068ffedafd") }
     end
 
     context "with a : in the name" do
@@ -420,12 +446,12 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       end
       let(:requirement_string) { "~> 1.5.0" }
 
-      it { is_expected.to eq("dependabot/dummy/business-tw-1.5.0") }
+      it { is_expected.to eq("dependabot/dummy_manager/business-tw-1.5.0") }
 
       context "when there is a trailing dot" do
         let(:requirement_string) { "^7." }
 
-        it { is_expected.to eq("dependabot/dummy/business-tw-7") }
+        it { is_expected.to eq("dependabot/dummy_manager/business-tw-7") }
       end
     end
 
@@ -435,7 +461,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
           name: "business",
           version: new_version,
           previous_version: previous_version,
-          package_manager: "dummy",
+          package_manager: "dummy_manager",
           requirements: [{
             file: "Gemfile",
             requirement: nil,
@@ -464,7 +490,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       let(:old_ref) { nil }
 
       it "truncates the version" do
-        expect(new_branch_name).to eq("dependabot/dummy/business-cff701b")
+        expect(new_branch_name).to eq("dependabot/dummy_manager/business-cff701b")
       end
 
       context "when there is a ref change" do
@@ -472,7 +498,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
         let(:old_ref) { "v1.0.0" }
 
         it "includes the ref rather than the commit" do
-          expect(new_branch_name).to eq("dependabot/dummy/business-v1.1.0")
+          expect(new_branch_name).to eq("dependabot/dummy_manager/business-v1.1.0")
         end
 
         context "when dealing with a library" do
@@ -480,7 +506,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
           let(:previous_version) { nil }
 
           it "includes the ref rather than the commit" do
-            expect(new_branch_name).to eq("dependabot/dummy/business-v1.1.0")
+            expect(new_branch_name).to eq("dependabot/dummy_manager/business-v1.1.0")
           end
         end
       end
@@ -587,7 +613,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
 
       it "includes the new ref" do
         expect(new_branch_name).to eq(
-          "dependabot/dummy/actions/checkout-v2.2.0"
+          "dependabot/dummy_manager/actions/checkout-v2.2.0"
         )
       end
     end
@@ -620,7 +646,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
 
       it "includes the new version" do
         expect(new_branch_name).to eq(
-          "dependabot/dummy/business-tw-2.0.0"
+          "dependabot/dummy_manager/business-tw-2.0.0"
         )
       end
     end
@@ -653,7 +679,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
 
       it "includes the new ref" do
         expect(new_branch_name).to eq(
-          "dependabot/dummy/business-v2.2.0"
+          "dependabot/dummy_manager/business-v2.2.0"
         )
       end
     end
