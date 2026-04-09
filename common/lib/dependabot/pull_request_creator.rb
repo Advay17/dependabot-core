@@ -121,7 +121,7 @@ module Dependabot
     attr_reader :branch_name_separator
 
     sig { returns(String) }
-    attr_reader :branch_name_secondary_separator
+    attr_reader :branch_name_ecosystem_separator
 
     sig { returns(String) }
     attr_reader :branch_name_dependency_separator
@@ -168,7 +168,7 @@ module Dependabot
         assignees: T.nilable(T.any(T::Array[String], T::Array[Integer])),
         milestone: T.nilable(T.any(T::Array[String], Integer)),
         branch_name_separator: String,
-        branch_name_secondary_separator: String,
+        branch_name_ecosystem_separator: String,
         branch_name_dependency_separator: String,
         branch_name_prefix: String,
         branch_name_max_length: T.nilable(Integer),
@@ -204,7 +204,7 @@ module Dependabot
       assignees: nil,
       milestone: nil,
       branch_name_separator: "/",
-      branch_name_secondary_separator: "_",
+      branch_name_ecosystem_separator: "_",
       branch_name_dependency_separator: "-",
       branch_name_prefix: "dependabot",
       branch_name_max_length: nil,
@@ -235,7 +235,7 @@ module Dependabot
       @milestone                  = milestone
       @vulnerabilities_fixed      = vulnerabilities_fixed
       @branch_name_separator      = branch_name_separator
-      @branch_name_secondary_separator = branch_name_secondary_separator
+      @branch_name_ecosystem_separator = branch_name_ecosystem_separator
       @branch_name_dependency_separator = branch_name_dependency_separator
       @branch_name_prefix         = branch_name_prefix
       @branch_name_max_length     = branch_name_max_length
@@ -430,7 +430,7 @@ module Dependabot
           target_branch: source.branch,
           dependency_group: dependency_group,
           separator: branch_name_separator,
-          secondary_separator: branch_name_secondary_separator,
+          ecosystem_separator: branch_name_ecosystem_separator,
           dependency_separator: branch_name_dependency_separator,
           prefix: branch_name_prefix,
           max_length: branch_name_max_length,

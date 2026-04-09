@@ -106,7 +106,7 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::SoloStrategy do
       it { is_expected.to eq("dependabot-dummy_manager-business-1.5.0") }
     end
 
-    context "with a custom branch name secondary separator" do
+    context "with a custom branch ecosystem name separator" do
       let(:namer) do
         described_class.new(
           dependencies: dependencies,

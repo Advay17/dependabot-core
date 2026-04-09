@@ -16,6 +16,8 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
       files: [gemfile, package_json],
       target_branch: target_branch,
       separator: separator,
+      ecosystem_separator: ecosystem_separator,
+      dependency_separator: dependency_separator,
       max_length: max_length,
       includes_security_fixes: includes_security_fixes,
       multi_ecosystem_name: multi_ecosystem_name
@@ -67,9 +69,11 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
   describe "#new_branch_name" do
     subject(:new_branch_name) { namer.new_branch_name }
 
-    context "with defaults for separator, target branch and files in the root" do
+    context "with defaults for separators, target branch and files in the root" do
       let(:target_branch) { "" }
       let(:separator) { "/" }
+      let(:ecosystem_separator) { "_" }
+      let(:dependency_separator) { "-" }
 
       it "returns the name of the multi-ecosystem prefixed correctly" do
         expect(namer.new_branch_name).to start_with("dependabot/my_multi_ecosystem")
@@ -82,6 +86,8 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
           files: [gemfile],
           target_branch: target_branch,
           separator: separator,
+          ecosystem_separator: ecosystem_separator,
+          dependency_separator: dependency_separator,
           includes_security_fixes: includes_security_fixes,
           multi_ecosystem_name: multi_ecosystem_name
         )
@@ -105,6 +111,8 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
           files: [gemfile],
           target_branch: target_branch,
           separator: separator,
+          ecosystem_separator: ecosystem_separator,
+          dependency_separator: dependency_separator,
           includes_security_fixes: includes_security_fixes,
           multi_ecosystem_name: multi_ecosystem_name
         )
@@ -127,6 +135,8 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
           files: [gemfile],
           target_branch: target_branch,
           separator: separator,
+          ecosystem_separator: ecosystem_separator,
+          dependency_separator: dependency_separator,
           includes_security_fixes: includes_security_fixes,
           multi_ecosystem_name: multi_ecosystem_name
         )
@@ -136,6 +146,8 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
           files: [gemfile],
           target_branch: target_branch,
           separator: separator,
+          ecosystem_separator: ecosystem_separator,
+          dependency_separator: dependency_separator,
           includes_security_fixes: includes_security_fixes,
           multi_ecosystem_name: multi_ecosystem_name
         )
@@ -147,6 +159,8 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
     context "with a multi-ecosystem security update" do
       let(:target_branch) { "" }
       let(:separator) { "/" }
+      let(:ecosystem_separator) { "_" }
+      let(:dependency_separator) { "-" }
       let(:includes_security_fixes) { true }
 
       it "returns the name of the security multi-ecosystem prefixed correctly" do
@@ -154,18 +168,22 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
       end
     end
 
-    context "with a custom separator" do
+    context "with custom separators" do
       let(:target_branch) { "" }
       let(:separator) { "_" }
+      let(:ecosystem_separator) { "-" }
+      let(:dependency_separator) { "/" }
 
       it "returns the name of the multi-ecosystem prefixed correctly" do
-        expect(namer.new_branch_name).to start_with("dependabot_my_multi_ecosystem")
+        expect(namer.new_branch_name).to eq("dependabot_my-multi-ecosystem/")
       end
     end
 
     context "with a maximum length" do
       let(:target_branch) { "" }
       let(:separator) { "/" }
+      let(:ecosystem_separator) { "_" }
+      let(:dependency_separator) { "-" }
 
       context "with a maximum length longer than branch name" do
         let(:max_length) { 50 }
@@ -202,21 +220,25 @@ RSpec.describe Dependabot::PullRequestCreator::BranchNamer::MultiEcosystemStrate
       end
     end
 
-    context "when dealing with the files targeting a branch" do
+    context "when dealing with files in a multi-ecosystem targeting a branch" do
       let(:target_branch) { "develop" }
       let(:separator) { "/" }
+      let(:ecosystem_separator) { "_" }
+      let(:dependency_separator) { "-" }
 
       it "returns the name of the multi-ecosystem prefixed correctly" do
         expect(namer.new_branch_name).to start_with("dependabot/develop/my_multi_ecosystem-9ccbdf484a")
       end
     end
 
-    context "when dealing with files in a multi-ecosystem targeting a branch" do
+    context "when dealing with files in a multi-ecosystem targeting a branch with custom separators" do
       let(:target_branch) { "develop" }
       let(:separator) { "_" }
+      let(:ecosystem_separator) { "-" }
+      let(:dependency_separator) { "/" }
 
       it "returns the name of the multi-ecosystem prefixed correctly" do
-        expect(namer.new_branch_name).to start_with("dependabot_develop_my_multi_ecosystem-9ccbdf484a")
+        expect(namer.new_branch_name).to start_with("dependabot_develop_my-multi-ecosystem/9ccbdf484a")
       end
     end
   end

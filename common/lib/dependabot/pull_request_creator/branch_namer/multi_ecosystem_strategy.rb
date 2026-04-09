@@ -18,7 +18,7 @@ module Dependabot
             includes_security_fixes: T::Boolean,
             multi_ecosystem_name: String,
             separator: String,
-            secondary_separator: String,
+            ecosystem_separator: String,
             dependency_separator: String,
             prefix: String,
             max_length: T.nilable(Integer)
@@ -32,7 +32,7 @@ module Dependabot
           includes_security_fixes:,
           multi_ecosystem_name:,
           separator: "/",
-          secondary_separator: "_",
+          ecosystem_separator: "_",
           dependency_separator: "-",
           prefix: "dependabot",
           max_length: nil
@@ -42,7 +42,7 @@ module Dependabot
             files: files,
             target_branch: target_branch,
             separator: separator,
-            secondary_separator: secondary_separator,
+            ecosystem_separator: ecosystem_separator,
             dependency_separator: dependency_separator,
             prefix: prefix,
             max_length: max_length,

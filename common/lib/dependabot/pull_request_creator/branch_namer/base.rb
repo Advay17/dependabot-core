@@ -22,7 +22,7 @@ module Dependabot
         attr_reader :separator
 
         sig { returns(String) }
-        attr_reader :secondary_separator
+        attr_reader :ecosystem_separator
 
         sig { returns(String) }
         attr_reader :dependency_separator
@@ -39,7 +39,7 @@ module Dependabot
             files: T::Array[DependencyFile],
             target_branch: T.nilable(String),
             separator: String,
-            secondary_separator: String,
+            ecosystem_separator: String,
             dependency_separator: String,
             prefix: String,
             max_length: T.nilable(Integer)
@@ -51,7 +51,7 @@ module Dependabot
           files:,
           target_branch:,
           separator: "/",
-          secondary_separator: "_",
+          ecosystem_separator: "_",
           dependency_separator: "-",
           prefix: "dependabot",
           max_length: nil
@@ -60,7 +60,7 @@ module Dependabot
           @files             = files
           @target_branch     = target_branch
           @separator         = separator
-          @secondary_separator = secondary_separator
+          @ecosystem_separator = ecosystem_separator
           @dependency_separator = dependency_separator
           @prefix            = prefix
           @max_length        = max_length
@@ -79,7 +79,7 @@ module Dependabot
           sanitized_name = sanitize_ref(ref_name)
 
           # Allow the name to be customized with different separators
-          sanitized_name = sanitized_name.gsub(/[\/_\-]/, "\/" => separator, "_" => secondary_separator, "-" => dependency_separator)
+          sanitized_name = sanitized_name.gsub(/[\/_\-]/, "\/" => separator, "_" => ecosystem_separator, "-" => dependency_separator)
 
           # Shorten the ref in case users refs have length limits
           if max_length && (sanitized_name.length > T.must(max_length))

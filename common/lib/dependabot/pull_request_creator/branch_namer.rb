@@ -28,7 +28,7 @@ module Dependabot
       attr_reader :separator
 
       sig { returns(String) }
-      attr_reader :secondary_separator
+      attr_reader :ecosystem_separator
 
       sig { returns(String) }
       attr_reader :dependency_separator
@@ -55,7 +55,7 @@ module Dependabot
           target_branch: T.nilable(String),
           dependency_group: T.nilable(Dependabot::DependencyGroup),
           separator: String,
-          secondary_separator: String,
+          ecosystem_separator: String,
           dependency_separator: String,
           prefix: String,
           max_length: T.nilable(Integer),
@@ -70,7 +70,7 @@ module Dependabot
         target_branch:,
         dependency_group: nil,
         separator: "/",
-        secondary_separator: "_",
+        ecosystem_separator: "_",
         dependency_separator: "-",
         prefix: "dependabot",
         max_length: nil,
@@ -82,7 +82,7 @@ module Dependabot
         @target_branch = target_branch
         @dependency_group = dependency_group
         @separator     = separator
-        @secondary_separator = secondary_separator
+        @ecosystem_separator = ecosystem_separator
         @dependency_separator = dependency_separator
         @prefix        = prefix
         @max_length    = max_length
@@ -119,7 +119,7 @@ module Dependabot
           target_branch: target_branch,
           includes_security_fixes: includes_security_fixes,
           separator: separator,
-          secondary_separator: secondary_separator,
+          ecosystem_separator: ecosystem_separator,
           dependency_separator: dependency_separator,
           prefix: prefix,
           max_length: max_length,
@@ -134,7 +134,7 @@ module Dependabot
           files: files,
           target_branch: target_branch,
           separator: separator,
-          secondary_separator: secondary_separator,
+          ecosystem_separator: ecosystem_separator,
           dependency_separator: dependency_separator,
           prefix: prefix,
           max_length: max_length
@@ -150,7 +150,7 @@ module Dependabot
           dependency_group: T.must(dependency_group),
           includes_security_fixes: includes_security_fixes,
           separator: separator,
-          secondary_separator: secondary_separator,
+          ecosystem_separator: ecosystem_separator,
           dependency_separator: dependency_separator,
           prefix: prefix,
           max_length: max_length
